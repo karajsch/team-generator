@@ -20,7 +20,7 @@ const questions = [{
     name: "name"
 } {
     type: "input";
-    message: "What is the employee's ID?"
+    message: "What is the employee's ID?",
     name: "id"
 } {
     type: "input",
