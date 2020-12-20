@@ -10,8 +10,32 @@ const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
 
+const Jest = require('jest');
 
 // Write code to use inquirer to gather information about the development team members,
+
+const questions = [{
+    type: "input",
+    message: "What is the name of the employee?",
+    name: "name"
+} {
+    type: "input";
+    message: "What is the employee's ID?"
+    name: "id"
+} {
+    type: "input",
+    message: "What is the employee's email address?",
+    name: "email"
+} {
+    type: "list",
+    message: "What is the employee's role?",
+    name: "role",
+    choices: [
+        'Engineer',
+        'Intern'
+    ]
+}]
+
 // and to create objects for each team member (using the correct classes as blueprints!)
 
 // After the user has input all employees desired, call the `render` function (required
