@@ -44,14 +44,14 @@ const questions = [{
     },
     {
         type: "input",
-        message: "What is the Interns school?",
-        name: "github",
+        message: "What is the Intern's school?",
+        name: "school",
         when: (answers) => answers.role === "Intern"
     },
     {
         type: "input",
-        message: "What is the managers office number?",
-        name: "github",
+        message: "What is the manager's office number?",
+        name: "officeNumber",
         when: (answers) => answers.role === "Manager"
     }, {
         type: "confirm",
@@ -65,10 +65,16 @@ const start_prompt = (the_array_of_questions, current_roster = []) => {
     inquirer.prompt(the_array_of_questions).then(res => {
         console.log(res, current_roster)
         //If confirm is true, then restart prompt. If confirm is false, then ask if user wants to print to html
-        let new_employee = ""
+        let new_employee;
         switch (res.role) {
             case "Engineer":
                 new_employee = new Engineer(res.name, res.id, res.email, res.github)
+                break
+            case "Manager":
+                new_employee = new Manager(res.name, res.id, res.email, res.officeNumber)
+                break
+            case "Intern":
+                new_employee = new Intern(res.name, res.id, res.email, res.school)
                 break
             default:
                 break
