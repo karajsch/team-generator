@@ -10,50 +10,81 @@ const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
 
-const Jest = require('jest');
-
 // Write code to use inquirer to gather information about the development team members,
 
 const questions = [{
-    type: "input",
-    message: "What is the name of the employee?",
-    name: "name"
-} {
-    type: "input";
-    message: "What is the employee's ID?",
-    name: "id"
-} {
-    type: "input",
-    message: "What is the employee's email address?",
-    name: "email"
-} {
-    type: "list",
-    message: "What is the employee's role?",
-    name: "role",
-    choices: [
-        'Engineer',
-        'Intern'
-    ]
-}]
+        type: "input",
+        message: "What is the name of the employee?",
+        name: "name"
+    },
+    {
+        type: "input",
+        message: "What is the employee's ID?",
+        name: "id"
+    },
+    {
+        type: "input",
+        message: "What is the employee's email address?",
+        name: "email"
+    },
+    {
+        type: "list",
+        message: "What is the employee's role?",
+        name: "role",
+        choices: [
+            'Engineer',
+            'Intern',
+            "Manager"
+        ]
+    }, {
+        type: "input",
+        message: "What is the engineer's Github name?",
+        name: "github",
+        when: (answers) => answers.role === "Engineer"
+    },
+    {
+        type: "input",
+        message: "What is the Interns school?",
+        name: "github",
+        when: (answers) => answers.role === "Intern"
+    },
+    {
+        type: "input",
+        message: "What is the managers office number?",
+        name: "github",
+        when: (answers) => answers.role === "Manager"
+    }, {
+        type: "confirm",
+        name: "continue",
+        message: "Do you want to add another employee?"
+    }
+]
 
-// and to create objects for each team member (using the correct classes as blueprints!)
 
-// After the user has input all employees desired, call the `render` function (required
-// above) and pass in an array containing all employee objects; the `render` function will
-// generate and return a block of HTML including templated divs for each employee!
+const start_prompt = (the_array_of_questions, current_roster = []) => {
+    inquirer.prompt(the_array_of_questions).then(res => {
+        console.log(res, current_roster)
+        //If confirm is true, then restart prompt. If confirm is false, then ask if user wants to print to html
+        let new_employee = ""
+        switch (res.role) {
+            case "Engineer":
+                new_employee = new Engineer(res.name, res.id, res.email, res.github)
+                break
+            default:
+                break
+        }
+        current_roster.push(new_employee)
 
-// After you have your html, you're now ready to create an HTML file using the HTML
-// returned from the `render` function. Now write it to a file named `team.html` in the
-// `output` folder. You can use the variable `outputPath` above target this location.
-// Hint: you may need to check if the `output` folder exists and create it if it
-// does not.
+        if (res.continue === true) {
+            start_prompt(the_array_of_questions, current_roster)
+        } else {
+            // render HTMl
+            fs.writeFile("./output/team.html", render(current_roster), "utf-8", () => {
+                console.log("I wrote a file")
+            })
+        }
 
-// HINT: each employee type (manager, engineer, or intern) has slightly different
-// information; write your code to ask different questions via inquirer depending on
-// employee type.
+    })
+}
 
-// HINT: make sure to build out your classes first! Remember that your Manager, Engineer,
-// and Intern classes should all extend from a class named Employee; see the directions
-// for further information. Be sure to test out each class and verify it generates an
-// object with the correct structure and methods. This structure will be crucial in order
-// for the provided `render` function to work! ```
+start_prompt(questions)
