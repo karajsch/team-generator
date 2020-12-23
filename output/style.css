@@ -1,0 +1,17 @@
+body {
+    font-family: 'Space Mono', monospace;
+}
+
+a:link,
+a:visited,
+a:active {
+    font-weight: strong;
+    text-decoration: none;
+    color: black;
+}
+
+a:hover {
+    font-weight: strong;
+    text-decoration: underline;
+    color: black;
+}
